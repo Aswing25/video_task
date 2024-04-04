@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video List</title>
+</head>
+<style>
+        .video-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 20px;
+        }
+        .video-item {
+            flex: 0 0 auto;
+
+        .button-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        }
+
+        .button-container form {
+        margin-right: 10px;
+        }
+
+     }
+    </style>
+<body>
+    <h1 style="text-align:center"><i>Video List</i></h1>
+     <div class="video-container">
+    {% for d in videos %}
+
+        <div class="video-item">
+            <h2>{{d.Tname}} </h2>
+            <video width="320" height="240" controls>
+                <source src="{{d.videofile.url}}" type="video/mp4" />
+            </video>
+           <div class="button-container">
+    <form action="{% url 'edit_page' dataid=d.id %}">
+        <button class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Edit</button>
+    </form>
+
+    <form action="{% url 'delete_video' dataid=d.id %}">
+        <button class="btn btn-danger"><i class="fa fa-shopping-cart"></i>Delete</button>
+    </form>
+</div>
+
+
+
+        </div><br>
+
+    {% endfor %}
+
+
+
+     </div>
+</body>
+</html>

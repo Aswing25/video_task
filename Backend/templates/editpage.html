@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <form method="post" action="{% url 'update_data' dataid=videos.id %}">
+        {% csrf_token %}
+        <div class="container">
+        <h1>Edit Videos here</h1>
+        <input type="file" id="fileInput"value="{{videos.videofile.url}}" accept="video/*" name="videos">
+          Add Video Title <input type="text" value="{{videos.Tname}}" name="name">
+
+        <button  onclick="uploadVideo()" >Upload</button>
+        <progress id="progressBar" value="0" max="100"></progress>
+        <p id="status"></p>
+    </div>
+
+    <script src="script.js"></script>
+   </form>
+</body>
+</html>
+
+
+
+<style>
+    .container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+input[type="file"] {
+}
+
+button {
+    margin-top: 10px;
+}
+
+progress {
+    width: 100%;
+    margin-top: 10px;
+}
+
+</style>
+
+
+<script>
+    function uploadVideo() {
+    var fileInput = document.getElementById('fileInput');
+    var progressBar = document.getElementById('progressBar');
+    var status = document.getElementById('status');
+
+    var file = fileInput.files[0];
+    if (!file) {
+        alert('Please select a file.');
+        return;
+    }
+
+    var formData = new FormData();
+    formData.append('video', file);
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', '/upload', true);
+
+    xhr.upload.onprogress = function(event) {
+        if (event.lengthComputable) {
+            var percentComplete = (event.loaded / event.total) * 100;
+            progressBar.value = percentComplete;
+        }
+    };
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            status.textContent = 'Upload successful!';
+        } else {
+            status.textContent = 'Upload failed!';
+        }
+    };
+
+    xhr.onerror = function() {
+        status.textContent = 'Upload failed!';
+    };
+
+    xhr.send(formData);
+}
+
+</script>
